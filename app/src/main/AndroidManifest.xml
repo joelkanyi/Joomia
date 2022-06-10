@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.kanyideveloper.joomia">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
+        android:name=".JoomiaApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,7 +17,7 @@
         android:theme="@style/Theme.Joomia"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".core.presentation.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Joomia">
