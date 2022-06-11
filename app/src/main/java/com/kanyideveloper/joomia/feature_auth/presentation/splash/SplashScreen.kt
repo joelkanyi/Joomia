@@ -7,12 +7,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kanyideveloper.joomia.R
 import com.kanyideveloper.joomia.core.util.Constants.SPLASH_SCREEN_DURATION
@@ -69,6 +71,6 @@ fun SplashScreen(
             }
         }
 
-        Image(painter = painterResource(id = R.drawable.ic_joomia_logo), contentDescription = null)
+        Image(modifier = Modifier.padding(24.dp), painter = painterResource(id = R.drawable.ic_joomia_logo), contentDescription = null)
     }
 }
