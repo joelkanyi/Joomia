@@ -24,6 +24,7 @@ import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
 import com.kanyideveloper.joomia.core.presentation.ui.theme.poppins
 import com.kanyideveloper.joomia.core.util.UiEvents
 import com.kanyideveloper.joomia.destinations.ForgotPasswordScreenDestination
+import com.kanyideveloper.joomia.destinations.RegisterScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -184,7 +185,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             TextButton(
-                onClick = { },
+                onClick = {
+                    navigator.popBackStack()
+                    navigator.navigate(RegisterScreenDestination)
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(

@@ -1,5 +1,6 @@
 package com.kanyideveloper.joomia.feature_auth.presentation.forgot_password
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -31,6 +33,8 @@ fun ForgotPasswordScreen() {
             }
         }
     ) {
+
+        val context = LocalContext.current
 
         Column(
             Modifier
@@ -60,7 +64,7 @@ fun ForgotPasswordScreen() {
 
             Button(
                 onClick = {
-
+                    Toast.makeText(context, "This API does not provide an endpoint for sending password reset link, just login with the credentials provided in the README file", Toast.LENGTH_LONG).show()
                 },
                 shape = RoundedCornerShape(8)
             ) {
