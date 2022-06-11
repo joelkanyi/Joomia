@@ -23,8 +23,8 @@ import androidx.compose.ui.window.DialogProperties
 import com.kanyideveloper.joomia.R
 import com.kanyideveloper.joomia.core.presentation.ui.theme.MainWhiteColor
 import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
-import com.kanyideveloper.joomia.feature_auth.presentation.destinations.LoginScreenDestination
-import com.kanyideveloper.joomia.feature_auth.presentation.destinations.RegisterScreenDestination
+import com.kanyideveloper.joomia.destinations.LoginScreenDestination
+import com.kanyideveloper.joomia.destinations.RegisterScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlin.system.exitProcess

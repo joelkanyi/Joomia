@@ -13,9 +13,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kanyideveloper.joomia.R
 import com.kanyideveloper.joomia.core.util.Constants.SPLASH_SCREEN_DURATION
-import com.kanyideveloper.joomia.feature_auth.presentation.destinations.AuthDashboardScreenDestination
+import com.kanyideveloper.joomia.destinations.HomeScreenDestination
+import com.kanyideveloper.joomia.destinations.LoginScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +27,8 @@ import kotlinx.coroutines.withContext
 @Destination(start = true)
 @Composable
 fun SplashScreen(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
     Column(
         Modifier.fillMaxSize(),
@@ -53,10 +56,19 @@ fun SplashScreen(
                 )
 
                 delay(SPLASH_SCREEN_DURATION)
-                navigator.popBackStack()
-                navigator.navigate(AuthDashboardScreenDestination)
+
+                val eventState = viewModel.eventState.value
+
+                if (eventState) {
+                    navigator.popBackStack()
+                    navigator.navigate(HomeScreenDestination)
+                } else {
+                    navigator.popBackStack()
+                    navigator.navigate(LoginScreenDestination)
+                }
             }
         }
+
         Image(painter = painterResource(id = R.drawable.ic_joomia_logo), contentDescription = null)
     }
 }
