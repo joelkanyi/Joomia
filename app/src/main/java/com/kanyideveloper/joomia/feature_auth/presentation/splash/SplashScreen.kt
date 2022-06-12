@@ -26,7 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
-@Destination(start = true)
+@Destination
 @Composable
 fun SplashScreen(
     navigator: DestinationsNavigator,
