@@ -1,13 +1,15 @@
 package com.kanyideveloper.joomia.feature_products.domain.model
 
-import com.kanyideveloper.joomia.feature_products.data.remote.dto.RatingDto
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Product(
     val category: String,
     val description: String,
     val id: Int,
     val image: String,
     val price: Double,
-    val ratingDto: RatingDto,
+    val rating: Rating,
     val title: String
-)
+) : Parcelable

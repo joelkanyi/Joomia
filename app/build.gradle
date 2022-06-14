@@ -114,4 +114,7 @@ dependencies {
 
     // Preferences DataStore (SharedPreferences like APIs)
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    // Ratingbar
+    implementation 'com.github.a914-gowtham:compose-ratingbar:1.2.3'
 }
