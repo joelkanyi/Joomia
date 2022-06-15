@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.gowtham.ratingbar.RatingBar
@@ -29,6 +31,8 @@ import com.kanyideveloper.joomia.core.presentation.ui.theme.GrayColor
 import com.kanyideveloper.joomia.core.presentation.ui.theme.MainWhiteColor
 import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
 import com.kanyideveloper.joomia.feature_products.domain.model.Product
+import com.kanyideveloper.joomia.feature_wish_list.domain.model.Wishlist
+import com.kanyideveloper.joomia.feature_wish_list.presentation.wishlist.WishlistViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -36,9 +40,11 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun ProductDetailsScreen(
     product: Product,
-    inWishlist: Boolean = true,
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: WishlistViewModel = hiltViewModel()
 ) {
+    val inWishlist = viewModel.inWishlist(product.id).observeAsState().value != null
+
     Scaffold(
         backgroundColor = Color.White,
         topBar = {
@@ -62,7 +68,27 @@ fun ProductDetailsScreen(
                 }
                 IconButton(
                     onClick = {
-
+                        if (inWishlist) {
+                            viewModel.deleteFromWishlist(
+                                Wishlist(
+                                    image = product.image,
+                                    title = product.title,
+                                    id = product.id,
+                                    liked = true,
+                                    price = product.price
+                                )
+                            )
+                        } else {
+                            viewModel.insertFavorite(
+                                Wishlist(
+                                    image = product.image,
+                                    title = product.title,
+                                    id = product.id,
+                                    liked = true,
+                                    price = product.price
+                                )
+                            )
+                        }
                     },
                 ) {
                     Icon(

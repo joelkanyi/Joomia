@@ -17,9 +17,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kanyideveloper.joomia.R
-import com.kanyideveloper.joomia.core.util.Constants.SPLASH_SCREEN_DURATION
 import com.kanyideveloper.joomia.destinations.AuthDashboardScreenDestination
 import com.kanyideveloper.joomia.destinations.HomeScreenDestination
+import com.kanyideveloper.joomia.feature_auth.util.Constants.SPLASH_SCREEN_DURATION
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers

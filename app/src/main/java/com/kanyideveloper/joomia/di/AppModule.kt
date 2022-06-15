@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.kanyideveloper.joomia.core.util.Constants
 import com.kanyideveloper.joomia.feature_auth.data.local.AuthPreferences
+import com.kanyideveloper.joomia.feature_auth.util.Constants.AUTH_PREFERENCES
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,7 +24,7 @@ object AppModule {
     fun providePreferenceDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             produceFile = {
-                context.preferencesDataStoreFile(Constants.AUTH_PREFERENCES)
+                context.preferencesDataStoreFile(AUTH_PREFERENCES)
             }
         )
 
