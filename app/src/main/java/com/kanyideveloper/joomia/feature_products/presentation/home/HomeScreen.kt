@@ -39,6 +39,7 @@ import com.kanyideveloper.joomia.core.presentation.ui.theme.MainWhiteColor
 import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
 import com.kanyideveloper.joomia.core.util.LoadingAnimation
 import com.kanyideveloper.joomia.core.util.UiEvents
+import com.kanyideveloper.joomia.destinations.ProductDetailsScreenDestination
 import com.kanyideveloper.joomia.feature_products.domain.model.Product
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -129,6 +130,7 @@ fun HomeScreen(
                 items(state.products) { product ->
                     ProductItem(
                         product = product,
+                        navigator = navigator,
                         modifier = Modifier
                             .width(150.dp)
                     )
@@ -148,10 +150,15 @@ fun HomeScreen(
 @Composable
 private fun ProductItem(
     product: Product,
+    navigator: DestinationsNavigator,
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.padding(4.dp),
+        modifier = modifier
+            .padding(4.dp)
+            .clickable {
+                navigator.navigate(ProductDetailsScreenDestination(product))
+            },
         elevation = 2.dp,
         backgroundColor = Color.White,
         shape = RoundedCornerShape(8.dp)
@@ -166,6 +173,7 @@ private fun ProductItem(
                     ImageRequest.Builder(LocalContext.current)
                         .data(data = product.image)
                         .apply(block = fun ImageRequest.Builder.() {
+                            placeholder(R.drawable.ic_placeholder)
                             crossfade(true)
                         }).build()
                 ),
@@ -208,7 +216,7 @@ private fun ProductItem(
                 )
                 Text(
                     modifier = Modifier.align(CenterVertically),
-                    text = "${product.ratingDto.rate} (${product.ratingDto.count})",
+                    text = "${product.rating.rate} (${product.rating.count})",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Light
                 )
