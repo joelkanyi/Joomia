@@ -30,7 +30,9 @@ import coil.request.ImageRequest
 import com.kanyideveloper.joomia.R
 import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
 import com.kanyideveloper.joomia.core.util.UiEvents
+import com.kanyideveloper.joomia.destinations.ProductDetailsScreenDestination
 import com.kanyideveloper.joomia.feature_wish_list.data.mapper.toDomain
+import com.kanyideveloper.joomia.feature_wish_list.data.mapper.toProduct
 import com.kanyideveloper.joomia.feature_wish_list.domain.model.Wishlist
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -111,7 +113,8 @@ fun WishlistScreen(
                         .fillMaxWidth()
                         .height(135.dp)
                         .padding(8.dp),
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    navigator = navigator
                 )
             }
         }
@@ -137,11 +140,12 @@ fun WishlistScreen(
 fun WishlistItem(
     wishlist: Wishlist,
     modifier: Modifier = Modifier,
-    viewModel: WishlistViewModel
+    viewModel: WishlistViewModel,
+    navigator: DestinationsNavigator
 ) {
     Card(
         modifier = modifier.clickable {
-
+            navigator.navigate(ProductDetailsScreenDestination(wishlist.toProduct()))
         },
         shape = RoundedCornerShape(8.dp),
         elevation = 3.dp

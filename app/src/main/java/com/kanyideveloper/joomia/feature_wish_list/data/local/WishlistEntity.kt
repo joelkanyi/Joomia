@@ -9,6 +9,9 @@ data class WishlistEntity(
     val image: String,
     val price: Double,
     val title: String,
-    val liked: Boolean,
+    val category: String,
+    val description: String,
+    val rating: RatingEntity,
+    val liked: Boolean = false,
     @PrimaryKey val id: Int,
 )

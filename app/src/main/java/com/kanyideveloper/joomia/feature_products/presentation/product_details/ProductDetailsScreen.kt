@@ -31,6 +31,7 @@ import com.kanyideveloper.joomia.core.presentation.ui.theme.GrayColor
 import com.kanyideveloper.joomia.core.presentation.ui.theme.MainWhiteColor
 import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
 import com.kanyideveloper.joomia.feature_products.domain.model.Product
+import com.kanyideveloper.joomia.feature_wish_list.data.mapper.toWishlistRating
 import com.kanyideveloper.joomia.feature_wish_list.domain.model.Wishlist
 import com.kanyideveloper.joomia.feature_wish_list.presentation.wishlist.WishlistViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -75,7 +76,10 @@ fun ProductDetailsScreen(
                                     title = product.title,
                                     id = product.id,
                                     liked = true,
-                                    price = product.price
+                                    price = product.price,
+                                    description = product.description,
+                                    category = product.category,
+                                    rating = product.rating.toWishlistRating()
                                 )
                             )
                         } else {
@@ -85,7 +89,10 @@ fun ProductDetailsScreen(
                                     title = product.title,
                                     id = product.id,
                                     liked = true,
-                                    price = product.price
+                                    price = product.price,
+                                    description = product.description,
+                                    category = product.category,
+                                    rating = product.rating.toWishlistRating()
                                 )
                             )
                         }
