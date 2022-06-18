@@ -6,9 +6,7 @@ import com.google.gson.Gson
 import com.kanyideveloper.joomia.feature_wish_list.data.local.RatingEntity
 
 @ProvidedTypeConverter
-class Converters {
-
-    private val gson = Gson()
+class Converters(private val gson: Gson) {
 
     @TypeConverter
     fun fromRating(ratingEntity: RatingEntity): String {

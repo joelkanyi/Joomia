@@ -66,25 +66,11 @@ fun WishlistScreen(
             TopAppBar(
                 elevation = 1.dp,
                 backgroundColor = Color.White,
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            navigator.popBackStack()
-                        },
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_chevron_left),
-                            contentDescription = null,
-                            tint = Color.Black
-                        )
-                    }
-                },
                 title = {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(end = 24.dp),
-                        textAlign = TextAlign.Center,
                         text = "Wishlist",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold

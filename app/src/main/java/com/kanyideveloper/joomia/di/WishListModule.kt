@@ -2,6 +2,7 @@ package com.kanyideveloper.joomia.di
 
 import android.content.Context
 import androidx.room.Room
+import com.google.gson.Gson
 import com.kanyideveloper.joomia.feature_wish_list.data.local.WishlistDatabase
 import com.kanyideveloper.joomia.feature_wish_list.data.repository.WishlistRepositoryImpl
 import com.kanyideveloper.joomia.feature_wish_list.data.util.Converters
@@ -20,7 +21,7 @@ object WishListModule {
 
     @Provides
     @Singleton
-    fun provideConverters() = Converters()
+    fun provideConverters(gson: Gson) = Converters(gson)
 
     @Provides
     @Singleton
