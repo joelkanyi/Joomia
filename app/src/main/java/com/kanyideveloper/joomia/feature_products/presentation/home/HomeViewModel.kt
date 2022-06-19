@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
     val categoriesState: State<List<String>> = _categoriesState
 
     private val _bannerImageState =
-        mutableStateOf("https://firebasestorage.googleapis.com/v0/b/savingszetu.appspot.com/o/Joomia%20Black%20Friday.png?alt=media&token=8f2a0858-b931-4421-b8ad-1ca1a5510c99")
+        mutableStateOf("https://firebasestorage.googleapis.com/v0/b/savingszetu.appspot.com/o/Joomia%20Black%20Friday.jpg?alt=media&token=83d89726-b69b-4795-8b73-3ef1a0e7c24d")
     val bannerImageState: State<String> = _bannerImageState
 
     private val _searchTerm = mutableStateOf("")
