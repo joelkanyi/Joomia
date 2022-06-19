@@ -1,4 +1,4 @@
-package com.kanyideveloper.joomia.feature_products.presentation.home
+package com.kanyideveloper.joomia.feature_cart.presentation.cart
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kanyideveloper.joomia.core.util.Resource
 import com.kanyideveloper.joomia.core.util.UiEvents
-import com.kanyideveloper.joomia.feature_products.domain.use_case.GetProductsUseCase
+import com.kanyideveloper.joomia.feature_cart.domain.use_case.GetCartItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,36 +16,27 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val getProductsUseCase: GetProductsUseCase) :
-    ViewModel() {
-
-    private val _selectedCategory = mutableStateOf("All")
-    val selectedCategory: State<String> = _selectedCategory
-    fun setCategory(value: String) {
-        _selectedCategory.value = value
-    }
-
-    private val _state = mutableStateOf(ProductsState())
-    val state: State<ProductsState> = _state
-
-    private val _bannerImageState = mutableStateOf("https://firebasestorage.googleapis.com/v0/b/savingszetu.appspot.com/o/Joomia%20Black%20Friday.png?alt=media&token=8f2a0858-b931-4421-b8ad-1ca1a5510c99")
-    val bannerImageState: State<String> = _bannerImageState
+class CartViewModel @Inject constructor(
+    private val getCartItemsUseCase: GetCartItemsUseCase
+) : ViewModel() {
+    private val _state = mutableStateOf(CartItemsState())
+    val state: State<CartItemsState> = _state
 
     private val _eventFlow = MutableSharedFlow<UiEvents>()
     val eventFlow: SharedFlow<UiEvents> = _eventFlow.asSharedFlow()
 
     init {
         viewModelScope.launch {
-            getProducts()
+            getCartItems()
         }
     }
 
-    private suspend fun getProducts() {
-        getProductsUseCase().collectLatest { result ->
+    private suspend fun getCartItems() {
+        getCartItemsUseCase().collectLatest { result ->
             when (result) {
                 is Resource.Success -> {
                     _state.value = state.value.copy(
-                        products = result.data ?: emptyList(),
+                        cartItems = result.data ?: emptyList(),
                         isLoading = false
                     )
                 }

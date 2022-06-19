@@ -1,6 +1,8 @@
 package com.kanyideveloper.joomia.feature_auth.data.repository
 
+import com.google.gson.Gson
 import com.kanyideveloper.joomia.core.util.Resource
+import com.kanyideveloper.joomia.feature_auth.data.dto.UserResponseDto
 import com.kanyideveloper.joomia.feature_auth.data.remote.AuthApiService
 import com.kanyideveloper.joomia.feature_auth.data.remote.request.LoginRequest
 import com.kanyideveloper.joomia.feature_auth.domain.repository.LoginRepository
@@ -21,6 +23,7 @@ class LoginRepositoryImpl(
             if (rememberMe) {
                 Timber.d(response.token)
                 authPreferences.saveAccessToken(response.token)
+                getAllUsers(loginRequest.username)?.let { authPreferences.saveUserdata(it) }
             }
             Resource.Success(Unit)
         } catch (e: IOException) {
@@ -38,5 +41,10 @@ class LoginRepositoryImpl(
         } else {
             Resource.Error("")
         }
+    }
+
+    private suspend fun getAllUsers(name: String): UserResponseDto? {
+        val response = authApiService.getAllUsers()
+        return response.find { it.username == name }
     }
 }
