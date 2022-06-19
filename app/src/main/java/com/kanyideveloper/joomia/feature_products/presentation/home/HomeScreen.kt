@@ -73,7 +73,8 @@ fun HomeScreen(
             }
         }
 
-        val state = viewModel.state.value
+        val productsState = viewModel.productsState.value
+        val categories = viewModel.categoriesState.value
 
         Box(modifier = Modifier.fillMaxSize()) {
             LazyVerticalGrid(
@@ -110,13 +111,6 @@ fun HomeScreen(
                 }
 
                 item(span = { GridItemSpan(2) }) {
-                    val categories = listOf(
-                        "All",
-                        "electronics",
-                        "jewelery",
-                        "men's clothing",
-                        "women's clothing"
-                    )
 
                     Categories(categories = categories, viewModel = viewModel)
 
@@ -128,7 +122,7 @@ fun HomeScreen(
                 }
 
                 // Actual product items list
-                items(state.products) { product ->
+                items(productsState.products) { product ->
                     ProductItem(
                         product = product,
                         navigator = navigator,
@@ -138,17 +132,19 @@ fun HomeScreen(
                 }
             }
 
-            if (state.isLoading) {
+            if (productsState.isLoading) {
                 LoadingAnimation(
                     modifier = Modifier.align(Center),
                     circleSize = 16.dp,
                 )
             }
 
-            if (state.error != null) Text(
+            if (productsState.error != null) Text(
                 textAlign = TextAlign.Center,
-                modifier = Modifier.align(Center).padding(16.dp),
-                text = state.error,
+                modifier = Modifier
+                    .align(Center)
+                    .padding(16.dp),
+                text = productsState.error,
                 color = Color.Red
             )
         }
@@ -403,6 +399,7 @@ fun Categories(categories: List<String>, viewModel: HomeViewModel) {
                     )
                     .clickable {
                         viewModel.setCategory(category)
+                        viewModel.getProducts(viewModel.selectedCategory.value)
                     }
                     .background(
                         if (category == viewModel.selectedCategory.value) {

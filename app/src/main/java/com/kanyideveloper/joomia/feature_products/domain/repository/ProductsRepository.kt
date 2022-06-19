@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductsRepository {
     suspend fun getProducts(): Flow<Resource<List<Product>>>
+    suspend fun getProductCategories(): List<String>
 }
