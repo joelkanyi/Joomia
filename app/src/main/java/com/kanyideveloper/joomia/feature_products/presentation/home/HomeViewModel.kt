@@ -39,6 +39,13 @@ class HomeViewModel @Inject constructor(
         mutableStateOf("https://firebasestorage.googleapis.com/v0/b/savingszetu.appspot.com/o/Joomia%20Black%20Friday.png?alt=media&token=8f2a0858-b931-4421-b8ad-1ca1a5510c99")
     val bannerImageState: State<String> = _bannerImageState
 
+    private val _searchTerm = mutableStateOf("")
+    val searchTerm: State<String> = _searchTerm
+
+    fun setSearchTerm(term: String) {
+        _searchTerm.value = term
+    }
+
     private val _eventFlow = MutableSharedFlow<UiEvents>()
     val eventFlow: SharedFlow<UiEvents> = _eventFlow.asSharedFlow()
 

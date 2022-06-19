@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -45,6 +46,7 @@ import com.kanyideveloper.joomia.feature_products.domain.model.Product
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Destination
@@ -53,10 +55,14 @@ fun HomeScreen(
     navigator: DestinationsNavigator,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
-            MyTopAppBar()
-        }
+            MyTopAppBar(viewModel)
+        },
     ) {
 
         val scaffoldState = rememberScaffoldState()
@@ -262,7 +268,9 @@ private fun ProductItem(
 }
 
 @Composable
-fun MyTopAppBar() {
+fun MyTopAppBar(
+    viewModel: HomeViewModel
+) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -311,9 +319,9 @@ fun MyTopAppBar() {
             verticalAlignment = CenterVertically
         ) {
             TextField(
-                value = "",
+                value = viewModel.searchTerm.value,
                 onValueChange = {
-                    //viewModel.setSearchTerm(it)
+                    viewModel.setSearchTerm(it)
                 },
                 placeholder = {
                     Text(
@@ -321,9 +329,13 @@ fun MyTopAppBar() {
                         //color = primaryGray
                     )
                 },
+
                 modifier = Modifier
                     .fillMaxWidth(0.80f)
-                    .background(MainWhiteColor, shape = RoundedCornerShape(8.dp)),
+                    .background(MainWhiteColor, shape = RoundedCornerShape(8.dp))
+                    .clickable {
+
+                    },
                 shape = RoundedCornerShape(size = 8.dp),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
@@ -352,7 +364,8 @@ fun MyTopAppBar() {
                 }
             )
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+            }) {
                 Icon(
                     modifier = Modifier
                         .size(55.dp)
