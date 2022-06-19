@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _profileState = mutableStateOf(User())
     val profileState: State<User> = _profileState

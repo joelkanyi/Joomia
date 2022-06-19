@@ -8,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,107 +42,111 @@ fun RegisterScreen(
                 )
             }
         }
+    ) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Spacer(modifier = Modifier.height(64.dp))
+
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = "",
+                onValueChange = {
+
+                },
+                label = {
+                    Text(text = "Name")
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    autoCorrect = true,
+                    keyboardType = KeyboardType.Email,
+                ),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = "",
+                onValueChange = {
+
+                },
+                label = {
+                    Text(text = "Email")
+                },
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = true,
+                    keyboardType = KeyboardType.Email,
+                ),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = "",
+                onValueChange = {
+
+                },
+                label = {
+                    Text(text = "Password")
+                },
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = true,
+                    keyboardType = KeyboardType.Password,
+                ),
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            val context = LocalContext.current
+
+            Button(
+                onClick = {
+
+                    Toast.makeText(
+                        context,
+                        "This API does not provide an endpoint for registering, just login with the credentials provided in the README file",
+                        Toast.LENGTH_LONG
+                    ).show()
+                },
+                shape = RoundedCornerShape(8)
             ) {
-                Spacer(modifier = Modifier.height(64.dp))
-
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = {
-
-                    },
-                    label = {
-                        Text(text = "Name")
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Words,
-                        autoCorrect = true,
-                        keyboardType = KeyboardType.Email,
-                    ),
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp), text = "Sign Up", textAlign = TextAlign.Center
                 )
+            }
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = {
-
+            TextButton(
+                onClick = {
+                    navigator.popBackStack()
+                    navigator.navigate(LoginScreenDestination)
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = buildAnnotatedString {
+                        append("Already have an account?")
+                        append(" ")
+                        withStyle(
+                            style = SpanStyle(color = YellowMain, fontWeight = FontWeight.Bold)
+                        ) {
+                            append("Sign In")
+                        }
                     },
-                    label = {
-                        Text(text = "Email")
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        autoCorrect = true,
-                        keyboardType = KeyboardType.Email,
-                    ),
+                    fontFamily = poppins,
+                    textAlign = TextAlign.Center
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = {
-
-                    },
-                    label = {
-                        Text(text = "Password")
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        autoCorrect = true,
-                        keyboardType = KeyboardType.Password,
-                    ),
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                val context = LocalContext.current
-
-                Button(
-                    onClick = {
-
-                        Toast.makeText(context, "This API does not provide an endpoint for registering, just login with the credentials provided in the README file", Toast.LENGTH_LONG).show()
-                    },
-                    shape = RoundedCornerShape(8)
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp), text = "Sign Up", textAlign = TextAlign.Center
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                TextButton(
-                    onClick = {
-                        navigator.popBackStack()
-                        navigator.navigate(LoginScreenDestination)
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = buildAnnotatedString {
-                            append("Already have an account?")
-                            append(" ")
-                            withStyle(
-                                style = SpanStyle(color = YellowMain, fontWeight = FontWeight.Bold)
-                            ) {
-                                append("Sign In")
-                            }
-                        },
-                        fontFamily = poppins,
-                        textAlign = TextAlign.Center
-                    )
-                }
             }
         }
+    }
 }

@@ -8,10 +8,10 @@ import timber.log.Timber
 class JoomiaApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        initTimber();
+        initTimber()
     }
 
-    private fun initTimber(){
+    private fun initTimber() {
         Timber.plant(Timber.DebugTree())
     }
 }

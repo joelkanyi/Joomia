@@ -7,6 +7,6 @@ class GetCategoriesUseCase(
 ) {
     suspend operator fun invoke(): List<String> {
         val categories = productsRepository.getProductCategories()
-        return listOf("All")+categories
+        return listOf("All") + categories
     }
 }

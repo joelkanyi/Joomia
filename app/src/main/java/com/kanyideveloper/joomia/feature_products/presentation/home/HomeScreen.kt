@@ -46,7 +46,6 @@ import com.kanyideveloper.joomia.feature_products.domain.model.Product
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Destination
@@ -55,9 +54,6 @@ fun HomeScreen(
     navigator: DestinationsNavigator,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {

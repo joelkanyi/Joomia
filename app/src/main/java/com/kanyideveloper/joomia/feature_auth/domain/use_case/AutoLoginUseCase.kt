@@ -6,7 +6,7 @@ import com.kanyideveloper.joomia.feature_auth.domain.repository.LoginRepository
 class AutoLoginUseCase(
     private val loginRepository: LoginRepository
 ) {
-    suspend operator fun invoke(): Resource<Unit>{
+    suspend operator fun invoke(): Resource<Unit> {
         return loginRepository.autoLogin()
     }
 }

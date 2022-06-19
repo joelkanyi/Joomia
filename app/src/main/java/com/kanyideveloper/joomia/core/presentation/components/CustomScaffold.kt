@@ -7,7 +7,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -41,7 +40,10 @@ fun CustomScaffold(
                     items.forEach { item ->
                         BottomNavigationItem(
                             icon = {
-                                Icon(painter = painterResource(id = item.icon), contentDescription = null)
+                                Icon(
+                                    painter = painterResource(id = item.icon),
+                                    contentDescription = null
+                                )
                             },
                             selectedContentColor = DarkBlue,
                             unselectedContentColor = GrayColor,

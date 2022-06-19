@@ -71,6 +71,10 @@ fun SplashScreen(
             }
         }
 
-        Image(modifier = Modifier.padding(24.dp), painter = painterResource(id = R.drawable.ic_joomia_logo), contentDescription = null)
+        Image(
+            modifier = Modifier.padding(24.dp),
+            painter = painterResource(id = R.drawable.ic_joomia_logo),
+            contentDescription = null
+        )
     }
 }

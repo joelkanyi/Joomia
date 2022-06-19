@@ -1,6 +1,6 @@
 package com.kanyideveloper.joomia.feature_products.presentation.product_details
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*

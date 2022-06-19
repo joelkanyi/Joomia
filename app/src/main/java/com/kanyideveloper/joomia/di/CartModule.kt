@@ -41,7 +41,11 @@ object CartModule {
 
     @Provides
     @Singleton
-    fun provideGetCartItemsUseCase(cartRepository: CartRepository, authPreferences: AuthPreferences, gson: Gson): GetCartItemsUseCase {
+    fun provideGetCartItemsUseCase(
+        cartRepository: CartRepository,
+        authPreferences: AuthPreferences,
+        gson: Gson
+    ): GetCartItemsUseCase {
         return GetCartItemsUseCase(cartRepository, authPreferences, gson)
     }
 }

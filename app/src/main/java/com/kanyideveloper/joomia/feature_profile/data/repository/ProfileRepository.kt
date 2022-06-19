@@ -11,7 +11,7 @@ class ProfileRepository(
     private val authPreferences: AuthPreferences,
     private val gson: Gson
 ) {
-    suspend fun getUserProfile() : User{
+    suspend fun getUserProfile(): User {
         val data = authPreferences.getUserData.first()
         val user = gson.fromJson(data, UserResponseDto::class.java)
         return user.toDomain()
