@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -53,10 +54,11 @@ fun HomeScreen(
     navigator: DestinationsNavigator,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+
     Scaffold(
         topBar = {
-            MyTopAppBar()
-        }
+            MyTopAppBar(viewModel)
+        },
     ) {
 
         val scaffoldState = rememberScaffoldState()
@@ -73,7 +75,8 @@ fun HomeScreen(
             }
         }
 
-        val state = viewModel.state.value
+        val productsState = viewModel.productsState.value
+        val categories = viewModel.categoriesState.value
 
         Box(modifier = Modifier.fillMaxSize()) {
             LazyVerticalGrid(
@@ -110,13 +113,6 @@ fun HomeScreen(
                 }
 
                 item(span = { GridItemSpan(2) }) {
-                    val categories = listOf(
-                        "All",
-                        "electronics",
-                        "jewelery",
-                        "men's clothing",
-                        "women's clothing"
-                    )
 
                     Categories(categories = categories, viewModel = viewModel)
 
@@ -128,7 +124,7 @@ fun HomeScreen(
                 }
 
                 // Actual product items list
-                items(state.products) { product ->
+                items(productsState.products) { product ->
                     ProductItem(
                         product = product,
                         navigator = navigator,
@@ -138,17 +134,19 @@ fun HomeScreen(
                 }
             }
 
-            if (state.isLoading) {
+            if (productsState.isLoading) {
                 LoadingAnimation(
                     modifier = Modifier.align(Center),
                     circleSize = 16.dp,
                 )
             }
 
-            if (state.error != null) Text(
+            if (productsState.error != null) Text(
                 textAlign = TextAlign.Center,
-                modifier = Modifier.align(Center).padding(16.dp),
-                text = state.error,
+                modifier = Modifier
+                    .align(Center)
+                    .padding(16.dp),
+                text = productsState.error,
                 color = Color.Red
             )
         }
@@ -266,7 +264,9 @@ private fun ProductItem(
 }
 
 @Composable
-fun MyTopAppBar() {
+fun MyTopAppBar(
+    viewModel: HomeViewModel
+) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -315,9 +315,9 @@ fun MyTopAppBar() {
             verticalAlignment = CenterVertically
         ) {
             TextField(
-                value = "",
+                value = viewModel.searchTerm.value,
                 onValueChange = {
-                    //viewModel.setSearchTerm(it)
+                    viewModel.setSearchTerm(it)
                 },
                 placeholder = {
                     Text(
@@ -325,9 +325,13 @@ fun MyTopAppBar() {
                         //color = primaryGray
                     )
                 },
+
                 modifier = Modifier
                     .fillMaxWidth(0.80f)
-                    .background(MainWhiteColor, shape = RoundedCornerShape(8.dp)),
+                    .background(MainWhiteColor, shape = RoundedCornerShape(8.dp))
+                    .clickable {
+
+                    },
                 shape = RoundedCornerShape(size = 8.dp),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
@@ -356,7 +360,8 @@ fun MyTopAppBar() {
                 }
             )
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+            }) {
                 Icon(
                     modifier = Modifier
                         .size(55.dp)
@@ -403,6 +408,7 @@ fun Categories(categories: List<String>, viewModel: HomeViewModel) {
                     )
                     .clickable {
                         viewModel.setCategory(category)
+                        viewModel.getProducts(viewModel.selectedCategory.value)
                     }
                     .background(
                         if (category == viewModel.selectedCategory.value) {

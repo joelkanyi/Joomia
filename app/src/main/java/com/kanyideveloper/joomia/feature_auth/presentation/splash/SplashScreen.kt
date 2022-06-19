@@ -51,7 +51,7 @@ fun SplashScreen(
                 scale.animateTo(
                     targetValue = 1.0f,
                     animationSpec = tween(
-                        durationMillis = 1000,
+                        durationMillis = 500,
                         easing = {
                             overshootInterpolator.getInterpolation(it)
                         })
@@ -71,6 +71,10 @@ fun SplashScreen(
             }
         }
 
-        Image(modifier = Modifier.padding(24.dp), painter = painterResource(id = R.drawable.ic_joomia_logo), contentDescription = null)
+        Image(
+            modifier = Modifier.padding(24.dp),
+            painter = painterResource(id = R.drawable.ic_joomia_logo),
+            contentDescription = null
+        )
     }
 }

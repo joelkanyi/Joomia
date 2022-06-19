@@ -1,12 +1,11 @@
 package com.kanyideveloper.joomia.feature_auth.data.repository
 
-import com.google.gson.Gson
 import com.kanyideveloper.joomia.core.util.Resource
 import com.kanyideveloper.joomia.feature_auth.data.dto.UserResponseDto
+import com.kanyideveloper.joomia.feature_auth.data.local.AuthPreferences
 import com.kanyideveloper.joomia.feature_auth.data.remote.AuthApiService
 import com.kanyideveloper.joomia.feature_auth.data.remote.request.LoginRequest
 import com.kanyideveloper.joomia.feature_auth.domain.repository.LoginRepository
-import com.kanyideveloper.joomia.feature_auth.data.local.AuthPreferences
 import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
 import timber.log.Timber

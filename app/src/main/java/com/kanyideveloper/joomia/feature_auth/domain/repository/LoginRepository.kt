@@ -2,7 +2,6 @@ package com.kanyideveloper.joomia.feature_auth.domain.repository
 
 import com.kanyideveloper.joomia.core.util.Resource
 import com.kanyideveloper.joomia.feature_auth.data.remote.request.LoginRequest
-import com.kanyideveloper.joomia.feature_auth.domain.model.User
 
 interface LoginRepository {
     suspend fun login(loginRequest: LoginRequest, rememberMe: Boolean): Resource<Unit>

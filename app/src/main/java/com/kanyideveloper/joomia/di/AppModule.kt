@@ -30,9 +30,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthPreferences(dataStore: DataStore<Preferences>, gson: Gson) = AuthPreferences(dataStore, gson)
+    fun provideAuthPreferences(dataStore: DataStore<Preferences>, gson: Gson) =
+        AuthPreferences(dataStore, gson)
 
     @Provides
     @Singleton
-    fun  provideGson() = Gson()
+    fun provideGson() = Gson()
 }
