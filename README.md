@@ -1,4 +1,4 @@
-<p align="center"><img src="screenshots/joomia.png" alt="Joomia" height="150px"></p>
+<p align="center"><img src="screenshots/joomia.png" alt="Joomia" height="100px"></p>
 
 # Joomia 🛒
 A fake shopping app built with Jetpack Compose consuming [FAKE STORE API](https://fakestoreapi.com/)
@@ -7,27 +7,21 @@ A fake shopping app built with Jetpack Compose consuming [FAKE STORE API](https:
 - The API has some endpoints that does nothing i.e adding item to cart, registering a user and many more. So some screens have UI implementation but no logic
 - Contributions are welcomed, because the app is far away from being good 😂
 
+## To be worked on
+- Add Search functionality
+- Add Filtering functionality
+- Add payment screen
+- Add more implementation to the account screen
+
 ## Demo
-### Splash screen
-<img src="screenshots/splash.png" width="250"/>
+<img src="screenshots/splash.png" width="250"/> <img src="screenshots/auth.png" width="250"/>
 
-### Auth screens
-<img src="screenshots/auth.png" width="250"/> <img src="screenshots/register.png" width="250"/> <img src="screenshots/login.png" width="250"/>
+<img src="screenshots/register.png" width="250"/> <img src="screenshots/login.png" width="250"/>
 
-#### Home screen
-<img src="screenshots/home.png" width="250"/>
+<img src="screenshots/home.png" width="250"/> <img src="screenshots/details.png" width="250"/> <img src="screenshots/wishlist.png" width="250"/>
 
-### Details screen
-<img src="screenshots/details.png" width="250"/>
+<img src="screenshots/cart.png" width="250"/> <img src="screenshots/account.png" width="250"/>
 
-### Wishlist screen
-<img src="screenshots/wishlist.png" width="250"/>
-
-### Cart screen
-<img src="screenshots/cart.png" width="250"/>
-
-### Account screen
-<img src="screenshots/account.png"/>
 
 ## Tech Stack.
 - [Kotlin](https://developer.android.com/kotlin) - Kotlin is a programming language that can run on JVM. Google has announced Kotlin as one of its officially supported programming languages in Android Studio; and the Android community is migrating at a pace from Java to Kotlin.
@@ -54,9 +48,3 @@ A fake shopping app built with Jetpack Compose consuming [FAKE STORE API](https:
 
 - CI/CD:
     - [GitHub Actions](https://github.com/features/actions) - GitHub Actions makes it easy to automate all your software workflows, now with world-class CI/CD. Build, test, and deploy your code right from GitHub. Make code reviews, branch management, and issue triaging work the way you want.
-
-## Todo
-- Add Search functionality
-- Add Filtering functionality
-- Add payment screen
-- Add more implementation to the account screen
