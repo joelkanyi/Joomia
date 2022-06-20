@@ -7,6 +7,10 @@ A fake shopping app built with Jetpack Compose consuming [FAKE STORE API](https:
 - The API has some endpoints that does nothing i.e adding item to cart, registering a user and many more. So some screens have UI implementation but no logic
 - Contributions are welcomed, because the app is far away from being good 😂
 
+## To Login - use :
+    - Username: johnd
+    - Password: m38rmF$
+
 ## To be worked on
 - Add Search functionality
 - Add Filtering functionality
