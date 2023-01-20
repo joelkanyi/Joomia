@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.kanyideveloper.joomia.feature_wish_list.data.util.Converters
 
 @TypeConverters(Converters::class)
-@Database(entities = [WishlistEntity::class], version = 2)
+@Database(entities = [WishlistEntity::class], version = 2, exportSchema = false)
 abstract class WishlistDatabase : RoomDatabase() {
     abstract val wishlistDao: WishlistDao
 }

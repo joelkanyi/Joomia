@@ -22,6 +22,12 @@ class AuthPreferences(private val dataStore: DataStore<Preferences>, private val
         preferences[AUTH_KEY] ?: ""
     }
 
+    suspend fun clearAccessToken() {
+        dataStore.edit { preferences ->
+            preferences.remove(AUTH_KEY)
+        }
+    }
+
     suspend fun saveUserdata(user: UserResponseDto) {
         dataStore.edit { preferences ->
             preferences[USER_DATA] = gson.toJson(user)
