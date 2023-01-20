@@ -19,10 +19,13 @@ class LoginRepositoryImpl(
         Timber.d("Login called")
         return try {
             val response = authApiService.loginUser(loginRequest)
+            Timber.d("Login Token: ${response.token}")
+
             if (rememberMe) {
-                Timber.d(response.token)
                 authPreferences.saveAccessToken(response.token)
                 getAllUsers(loginRequest.username)?.let { authPreferences.saveUserdata(it) }
+                val savedToken = authPreferences.getAccessToken.first()
+                Timber.d("Saved Auth Token: $savedToken")
             }
             Resource.Success(Unit)
         } catch (e: IOException) {
@@ -44,20 +47,17 @@ class LoginRepositoryImpl(
 
     override suspend fun logout(): Resource<Unit> {
         return try {
-            val token = authPreferences.clearAccessToken()
-            Timber.d("token: $token")
-            val fetchToken = authPreferences.getAccessToken.first()
-            if (fetchToken == " ") {
+            authPreferences.clearAccessToken()
+            val fetchedToken = authPreferences.getAccessToken.first()
+            Timber.d("token: $fetchedToken")
+
+            if (fetchedToken == "") {
                 Resource.Error("Unknown Error")
             } else {
                 Resource.Success(Unit)
             }
         } catch (e: Exception) {
             return Resource.Error("Unknown error occurred")
-        } catch (e: HttpException) {
-            return Resource.Error("Unknown error occurred")
-        } catch (e: IOException) {
-            return Resource.Error("Network error")
         }
     }
 
