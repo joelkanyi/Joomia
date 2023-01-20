@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
@@ -29,17 +30,21 @@ import coil.request.ImageRequest
 import com.kanyideveloper.joomia.R
 import com.kanyideveloper.joomia.core.presentation.ui.theme.GrayColor
 import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
+import com.kanyideveloper.joomia.core.util.UiEvents
 import com.kanyideveloper.joomia.feature_profile.domain.model.Account
 import com.kanyideveloper.joomia.feature_profile.domain.model.User
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.flow.collectLatest
 import java.util.*
 
 @Destination
 @Composable
 fun AccountScreen(
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = hiltViewModel(),
+    logoutViewModel: LogoutViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
 ) {
-
     val user = viewModel.profileState.value
 
     val accountItems = listOf(
@@ -58,11 +63,34 @@ fun AccountScreen(
         Account(
             "Settings",
             "Notifications, password, language"
-        ),
+        )
     )
+
+    val scaffoldState = rememberScaffoldState()
+
+    LaunchedEffect(key1 = true) {
+        logoutViewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UiEvents.SnackbarEvent -> {
+                    event.message.let {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            message = it,
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+                is UiEvents.NavigateEvent -> {
+                    navigator.navigate(
+                        event.route
+                    )
+                }
+            }
+        }
+    }
 
     Scaffold(
         backgroundColor = Color.White,
+        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 elevation = 1.dp,
@@ -76,7 +104,7 @@ fun AccountScreen(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold
                     )
-                },
+                }
             )
         }
     ) {
@@ -87,7 +115,7 @@ fun AccountScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(130.dp)
-                        .padding(4.dp),
+                        .padding(4.dp)
                 )
             }
             items(accountItems) { item ->
@@ -105,15 +133,17 @@ fun AccountScreen(
                     ) {
                         Column {
                             Text(
-                                text = item.title, color = Color.Black,
+                                text = item.title,
+                                color = Color.Black,
                                 fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp,
+                                fontSize = 16.sp
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = item.content, color = Color.Black,
+                                text = item.content,
+                                color = Color.Black,
                                 fontWeight = FontWeight.Light,
-                                fontSize = 12.sp,
+                                fontSize = 12.sp
                             )
                         }
                         IconButton(onClick = { /*TODO*/ }) {
@@ -130,14 +160,16 @@ fun AccountScreen(
                 Button(
                     modifier = Modifier.padding(8.dp),
                     onClick = {
-                        //viewModel.loginUser()
+                        logoutViewModel.logout()
                     },
                     shape = RoundedCornerShape(8)
                 ) {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(12.dp), text = "Sign Out", textAlign = TextAlign.Center
+                            .padding(12.dp),
+                        text = "Sign Out",
+                        textAlign = TextAlign.Center
                     )
                 }
             }
@@ -183,17 +215,17 @@ fun UserItem(
             ) {
                 Text(
                     text = "${
-                        user.name?.firstname?.replaceFirstChar {
-                            if (it.isLowerCase()) it.titlecase(
-                                Locale.getDefault()
-                            ) else it.toString()
-                        }
+                    user.name?.firstname?.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    }
                     }  ${
-                        user.name?.lastname?.replaceFirstChar {
-                            if (it.isLowerCase()) it.titlecase(
-                                Locale.getDefault()
-                            ) else it.toString()
-                        }
+                    user.name?.lastname?.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    }
                     }",
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -216,7 +248,7 @@ fun UserItem(
                     },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Color.Black,
-                        backgroundColor = YellowMain,
+                        backgroundColor = YellowMain
                     ),
                     shape = RoundedCornerShape(16.dp)
                 ) {

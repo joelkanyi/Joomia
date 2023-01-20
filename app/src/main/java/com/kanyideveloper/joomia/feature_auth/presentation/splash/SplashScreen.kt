@@ -37,7 +37,6 @@ fun SplashScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         val scale = remember {
             Animatable(0f)
         }
@@ -54,7 +53,8 @@ fun SplashScreen(
                         durationMillis = 500,
                         easing = {
                             overshootInterpolator.getInterpolation(it)
-                        })
+                        }
+                    )
                 )
 
                 delay(SPLASH_SCREEN_DURATION)

@@ -7,6 +7,7 @@ import com.kanyideveloper.joomia.feature_auth.data.repository.LoginRepositoryImp
 import com.kanyideveloper.joomia.feature_auth.domain.repository.LoginRepository
 import com.kanyideveloper.joomia.feature_auth.domain.use_case.AutoLoginUseCase
 import com.kanyideveloper.joomia.feature_auth.domain.use_case.LoginUseCase
+import com.kanyideveloper.joomia.feature_auth.domain.use_case.LogoutUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,5 +52,11 @@ object AuthModule {
     @Singleton
     fun provideAutoLoginUseCase(loginRepository: LoginRepository): AutoLoginUseCase {
         return AutoLoginUseCase(loginRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLogoutUseCase(loginRepository: LoginRepository): LogoutUseCase {
+        return LogoutUseCase(loginRepository)
     }
 }

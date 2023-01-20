@@ -42,6 +42,25 @@ class LoginRepositoryImpl(
         }
     }
 
+    override suspend fun logout(): Resource<Unit> {
+        return try {
+            val token = authPreferences.clearAccessToken()
+            Timber.d("token: $token")
+            val fetchToken = authPreferences.getAccessToken.first()
+            if (fetchToken == " ") {
+                Resource.Error("Unknown Error")
+            } else {
+                Resource.Success(Unit)
+            }
+        } catch (e: Exception) {
+            return Resource.Error("Unknown error occurred")
+        } catch (e: HttpException) {
+            return Resource.Error("Unknown error occurred")
+        } catch (e: IOException) {
+            return Resource.Error("Network error")
+        }
+    }
+
     private suspend fun getAllUsers(name: String): UserResponseDto? {
         val response = authApiService.getAllUsers()
         return response.find { it.username == name }
