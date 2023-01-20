@@ -42,7 +42,6 @@ import java.util.*
 @Composable
 fun AccountScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
-    logoutViewModel: LogoutViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     val user = viewModel.profileState.value
@@ -69,7 +68,7 @@ fun AccountScreen(
     val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(key1 = true) {
-        logoutViewModel.eventFlow.collectLatest { event ->
+        viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is UiEvents.SnackbarEvent -> {
                     event.message.let {
@@ -160,7 +159,7 @@ fun AccountScreen(
                 Button(
                     modifier = Modifier.padding(8.dp),
                     onClick = {
-                        logoutViewModel.logout()
+                        viewModel.logout()
                     },
                     shape = RoundedCornerShape(8)
                 ) {
