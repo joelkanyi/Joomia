@@ -33,12 +33,10 @@ import kotlinx.coroutines.flow.collectLatest
 @Destination
 @Composable
 fun CartScreen(
-    navigator: DestinationsNavigator,
-    viewModel: CartViewModel = hiltViewModel()
+    viewModel: CartViewModel = hiltViewModel(),
 ) {
 
     val state = viewModel.state.value
-
     val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(key1 = true) {
@@ -72,6 +70,13 @@ fun CartScreen(
             )
         }
     ) {
+        CartScreenContent(state = state)
+    }
+}
+
+@Composable
+private fun CartScreenContent(state: CartItemsState) {
+    Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             items(state.cartItems) { cartItem ->
                 CartItem(
@@ -84,61 +89,7 @@ fun CartScreen(
             }
             item {
                 if (state.cartItems.isNotEmpty()) {
-                    Column(Modifier.padding(12.dp)) {
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(text = "${state.cartItems.size} items")
-                            Text(
-                                text = "${state.cartItems.sumOf { (it.price * it.quantity) }}",
-                                color = Color.Black,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(text = "Shipping fee")
-                            Text(
-                                text = "$60.00", color = Color.Black,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(5.dp))
-
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(text = "Total")
-                            Text(
-                                text = "$${
-                                    state.cartItems.sumOf { (it.price * it.quantity) } + 60.00
-                                }", color = Color.Black,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        Button(
-                            onClick = {
-                                //viewModel.loginUser()
-                            },
-                            shape = RoundedCornerShape(8)
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp), text = "Checkout", textAlign = TextAlign.Center
-                            )
-                        }
-                    }
+                    CheckoutComponent(state = state)
                 }
             }
         }
@@ -185,6 +136,63 @@ fun CartScreen(
                     contentDescription = null
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun CheckoutComponent(state: CartItemsState) {
+    Column(Modifier.padding(12.dp)) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "${state.cartItems.size} items")
+            Text(
+                text = "${state.cartItems.sumOf { (it.price * it.quantity) }}",
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+        Spacer(modifier = Modifier.height(5.dp))
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "Shipping fee")
+            Text(
+                text = "$60.00", color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+        Spacer(modifier = Modifier.height(5.dp))
+
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "Total")
+            Text(
+                text = "$${
+                    state.cartItems.sumOf { (it.price * it.quantity) } + 60.00
+                }", color = Color.Black,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Button(
+            onClick = {},
+            shape = RoundedCornerShape(8)
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp), text = "Checkout", textAlign = TextAlign.Center
+            )
         }
     }
 }

@@ -1,15 +1,13 @@
 package com.kanyideveloper.joomia.feature_auth.presentation.login
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -22,6 +20,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kanyideveloper.joomia.core.domain.model.TextFieldState
 import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
 import com.kanyideveloper.joomia.core.presentation.ui.theme.poppins
 import com.kanyideveloper.joomia.core.util.UiEvents
@@ -36,7 +35,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun LoginScreen(
     navigator: DestinationsNavigator,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val usernameState = viewModel.usernameState.value
     val passwordState = viewModel.passwordState.value
@@ -84,13 +83,52 @@ fun LoginScreen(
         },
         scaffoldState = scaffoldState
     ) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = CenterHorizontally,
-        ) {
+        LoginScreenContent(
+            usernameState = usernameState,
+            passwordState = passwordState,
+            rememberMeState = rememberMeState,
+            loginState = loginState,
+            onUserNameTextChange = {
+                viewModel.setUsername(it)
+            },
+            onPasswordTextChange = {
+                viewModel.setPassword(it)
+            },
+            onRememberMeClicked = {
+                viewModel.setRememberMe(it)
+            },
+            onClickForgotPassword = {
+                navigator.navigate(ForgotPasswordScreenDestination)
+            },
+            onClickDontHaveAccount = {
+                navigator.popBackStack()
+                navigator.navigate(RegisterScreenDestination)
+            },
+            onClickSignIn = {
+                keyboardController?.hide()
+                viewModel.loginUser()
+            }
+        )
+    }
+}
+
+@Composable
+private fun LoginScreenContent(
+    usernameState: TextFieldState,
+    passwordState: TextFieldState,
+    rememberMeState: Boolean,
+    loginState: LoginState,
+    onUserNameTextChange: (String) -> Unit,
+    onPasswordTextChange: (String) -> Unit,
+    onRememberMeClicked: (Boolean) -> Unit,
+    onClickForgotPassword: () -> Unit,
+    onClickDontHaveAccount: () -> Unit,
+    onClickSignIn: () -> Unit,
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+    ) {
+        item {
             Spacer(modifier = Modifier.height(64.dp))
 
             Column {
@@ -98,7 +136,7 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
                     value = usernameState.text,
                     onValueChange = {
-                        viewModel.setUsername(it)
+                        onUserNameTextChange(it)
                     },
                     label = {
                         Text(text = "Username")
@@ -120,7 +158,9 @@ fun LoginScreen(
                     )
                 }
             }
+        }
 
+        item {
             Spacer(modifier = Modifier.height(16.dp))
 
             Column {
@@ -128,7 +168,7 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
                     value = passwordState.text,
                     onValueChange = {
-                        viewModel.setPassword(it)
+                        onPasswordTextChange(it)
                     },
                     label = {
                         Text(text = "Password")
@@ -151,7 +191,9 @@ fun LoginScreen(
                     )
                 }
             }
+        }
 
+        item {
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
@@ -164,24 +206,21 @@ fun LoginScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(checked = rememberMeState, onCheckedChange = {
-                        viewModel.setRememberMe(it)
+                        onRememberMeClicked(it)
                     })
                     Text(text = "Remember me", fontSize = 12.sp)
                 }
-                TextButton(onClick = {
-                    navigator.navigate(ForgotPasswordScreenDestination)
-                }) {
+                TextButton(onClick = onClickForgotPassword) {
                     Text(text = "Forgot password?")
                 }
             }
+        }
 
+        item {
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = {
-                    keyboardController?.hide()
-                    viewModel.loginUser()
-                },
+                onClick = onClickSignIn,
                 shape = RoundedCornerShape(8),
                 enabled = !loginState.isLoading
             ) {
@@ -191,14 +230,13 @@ fun LoginScreen(
                         .padding(12.dp), text = "Sign In", textAlign = TextAlign.Center
                 )
             }
+        }
 
+        item {
             Spacer(modifier = Modifier.height(24.dp))
 
             TextButton(
-                onClick = {
-                    navigator.popBackStack()
-                    navigator.navigate(RegisterScreenDestination)
-                },
+                onClick = onClickDontHaveAccount,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -215,9 +253,17 @@ fun LoginScreen(
                     textAlign = TextAlign.Center
                 )
             }
+        }
 
-            if (loginState.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
+        item {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (loginState.isLoading) {
+                    CircularProgressIndicator()
+                }
             }
         }
     }
