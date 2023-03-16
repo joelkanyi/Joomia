@@ -27,10 +27,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.kanyideveloper.joomia.NavGraphs
 import com.kanyideveloper.joomia.R
 import com.kanyideveloper.joomia.core.presentation.ui.theme.GrayColor
 import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
 import com.kanyideveloper.joomia.core.util.UiEvents
+import com.kanyideveloper.joomia.destinations.AccountScreenDestination
+import com.kanyideveloper.joomia.destinations.CartScreenDestination
+import com.kanyideveloper.joomia.destinations.HomeScreenDestination
+import com.kanyideveloper.joomia.destinations.WishlistScreenDestination
 import com.kanyideveloper.joomia.feature_profile.domain.model.Account
 import com.kanyideveloper.joomia.feature_profile.domain.model.User
 import com.ramcosta.composedestinations.annotation.Destination
@@ -44,6 +49,9 @@ fun AccountScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
+    LaunchedEffect(key1 = true, block = {
+        viewModel.getProfile()
+    })
     val user = viewModel.profileState.value
 
     val accountItems = listOf(
@@ -79,9 +87,20 @@ fun AccountScreen(
                     }
                 }
                 is UiEvents.NavigateEvent -> {
-                    navigator.navigate(
-                        event.route
-                    )
+                    navigator.navigate(event.route){
+                        popUpTo(AccountScreenDestination.route) {
+                            inclusive = false
+                        }
+                        popUpTo(HomeScreenDestination.route) {
+                            inclusive = false
+                        }
+                        popUpTo(WishlistScreenDestination.route) {
+                            inclusive = false
+                        }
+                        popUpTo(CartScreenDestination.route) {
+                            inclusive = false
+                        }
+                    }
                 }
             }
         }

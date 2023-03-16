@@ -21,11 +21,10 @@ class LoginRepositoryImpl(
             val response = authApiService.loginUser(loginRequest)
             Timber.d("Login Token: ${response.token}")
 
+            getAllUsers(loginRequest.username)?.let { authPreferences.saveUserdata(it) }
+
             if (rememberMe) {
                 authPreferences.saveAccessToken(response.token)
-                getAllUsers(loginRequest.username)?.let { authPreferences.saveUserdata(it) }
-                val savedToken = authPreferences.getAccessToken.first()
-                Timber.d("Saved Auth Token: $savedToken")
             }
             Resource.Success(Unit)
         } catch (e: IOException) {
@@ -51,10 +50,10 @@ class LoginRepositoryImpl(
             val fetchedToken = authPreferences.getAccessToken.first()
             Timber.d("token: $fetchedToken")
 
-            if (fetchedToken == "") {
-                Resource.Error("Unknown Error")
-            } else {
+            if (fetchedToken.isEmpty()) {
                 Resource.Success(Unit)
+            } else {
+                Resource.Error("Unknown Error")
             }
         } catch (e: Exception) {
             return Resource.Error("Unknown error occurred")

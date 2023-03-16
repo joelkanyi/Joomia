@@ -14,7 +14,7 @@ import javax.inject.Singleton
 object ProfileModule {
     @Provides
     @Singleton
-    fun provideProfileRepository(authPreferences: AuthPreferences, gson: Gson): ProfileRepository {
-        return ProfileRepository(authPreferences, gson)
+    fun provideProfileRepository(authPreferences: AuthPreferences): ProfileRepository {
+        return ProfileRepository(authPreferences)
     }
 }
