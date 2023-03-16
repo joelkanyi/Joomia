@@ -1,5 +1,7 @@
 package com.kanyideveloper.joomia.feature_products.presentation.home
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -13,6 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -33,6 +39,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,6 +66,9 @@ fun HomeScreen(
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
+    var filtersExpanded by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
 
     Scaffold(
         topBar = {
@@ -72,7 +82,10 @@ fun HomeScreen(
                     viewModel.getProducts(
                         searchTerm = viewModel.searchTerm.value
                     )
-                }
+                },
+                onToggleExpand = {
+                    filtersExpanded = !filtersExpanded
+                },
             )
         },
     ) {
@@ -89,6 +102,27 @@ fun HomeScreen(
                     else -> {}
                 }
             }
+        }
+
+        DropdownMenu(
+            expanded = filtersExpanded,
+            offset = DpOffset(x = 200.dp, y = -600.dp),
+            onDismissRequest = {
+                filtersExpanded = !filtersExpanded
+            }
+        ) {
+            DropdownMenuItem(
+                content = { Text("Clothes") },
+                onClick = { Toast.makeText(context, "Clothes", Toast.LENGTH_SHORT).show() }
+            )
+            DropdownMenuItem(
+                content = { Text("Shoes") },
+                onClick = { Toast.makeText(context, "Shoes", Toast.LENGTH_SHORT).show() }
+            )
+            DropdownMenuItem(
+                content = { Text("Electronics") },
+                onClick = { Toast.makeText(context, "Electronics", Toast.LENGTH_SHORT).show() }
+            )
         }
 
         val productsState = viewModel.productsState.value
@@ -284,6 +318,7 @@ fun MyTopAppBar(
     currentSearchText: String,
     onSearchTextChange: (String) -> Unit,
     onSearch: () -> Unit,
+    onToggleExpand: () -> Unit,
 ) {
     Column(
         Modifier
@@ -384,8 +419,7 @@ fun MyTopAppBar(
                 }
             )
 
-            IconButton(onClick = {
-            }) {
+            IconButton(onClick = onToggleExpand) {
                 Icon(
                     modifier = Modifier
                         .size(55.dp)
