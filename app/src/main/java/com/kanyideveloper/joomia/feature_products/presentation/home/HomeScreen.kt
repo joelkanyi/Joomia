@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
@@ -12,20 +13,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Alignment.Companion.End
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -47,17 +50,30 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Destination
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(
         topBar = {
-            MyTopAppBar(viewModel)
+            MyTopAppBar(
+                currentSearchText = viewModel.searchTerm.value,
+                onSearchTextChange = {
+                    viewModel.setSearchTerm(it)
+                },
+                onSearch = {
+                    keyboardController?.hide()
+                    viewModel.getProducts(
+                        searchTerm = viewModel.searchTerm.value
+                    )
+                }
+            )
         },
     ) {
 
@@ -157,7 +173,7 @@ fun HomeScreen(
 private fun ProductItem(
     product: Product,
     navigator: DestinationsNavigator,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
@@ -265,12 +281,14 @@ private fun ProductItem(
 
 @Composable
 fun MyTopAppBar(
-    viewModel: HomeViewModel
+    currentSearchText: String,
+    onSearchTextChange: (String) -> Unit,
+    onSearch: () -> Unit,
 ) {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(12.dp), /*horizontalAlignment = Alignment.CenterHorizontally*/
+            .padding(12.dp),
     ) {
         Row(
             Modifier
@@ -285,7 +303,7 @@ fun MyTopAppBar(
                 Image(
                     painter = rememberAsyncImagePainter(
                         ImageRequest.Builder(LocalContext.current)
-                            .data(data = "https://firebasestorage.googleapis.com/v0/b/savingszetu.appspot.com/o/50293753.jpeg?alt=media&token=a7174053-5253-49ed-b885-08f428df0287")
+                            .data(data = "https://firebasestorage.googleapis.com/v0/b/mealtime-7a501.appspot.com/o/tinywow_Joomia%20Black%20Friday_16608968%20(1).png?alt=media&token=8b874def-e543-482e-80f7-c8cbe9d9f206")
                             .apply(block = fun ImageRequest.Builder.() {
                                 crossfade(true)
                             }).build()
@@ -293,7 +311,8 @@ fun MyTopAppBar(
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(35.dp),
-                    contentDescription = null
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Hi, John", fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -315,14 +334,13 @@ fun MyTopAppBar(
             verticalAlignment = CenterVertically
         ) {
             TextField(
-                value = viewModel.searchTerm.value,
+                value = currentSearchText,
                 onValueChange = {
-                    viewModel.setSearchTerm(it)
+                    onSearchTextChange(it)
                 },
                 placeholder = {
                     Text(
                         text = "Search",
-                        //color = primaryGray
                     )
                 },
 
@@ -337,6 +355,12 @@ fun MyTopAppBar(
                     capitalization = KeyboardCapitalization.Words,
                     autoCorrect = true,
                     keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Search
+                ),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        onSearch()
+                    }
                 ),
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color.White,
