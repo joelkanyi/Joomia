@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
-    private val getCategoriesUseCase: GetCategoriesUseCase
+    private val getCategoriesUseCase: GetCategoriesUseCase,
 ) :
     ViewModel() {
 
@@ -61,14 +61,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getProducts(category: String) {
+    fun getProducts(category: String = "All", searchTerm: String = "") {
         viewModelScope.launch {
             getProductsUseCase().collectLatest { result ->
                 when (result) {
                     is Resource.Success -> {
                         if (category == "All") {
                             _productsState.value = productsState.value.copy(
-                                products = result.data ?: emptyList(),
+                                products = if (searchTerm.isEmpty()) {
+                                    result.data ?: emptyList()
+                                } else {
+                                    result.data?.filter {
+                                        it.title.contains(
+                                            searchTerm,
+                                            ignoreCase = true
+                                        )
+                                    } ?: emptyList()
+                                },
                                 isLoading = false
                             )
                         } else {
