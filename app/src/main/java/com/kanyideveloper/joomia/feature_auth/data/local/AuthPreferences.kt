@@ -24,7 +24,7 @@ class AuthPreferences(private val dataStore: DataStore<Preferences>, private val
 
     suspend fun clearAccessToken() {
         dataStore.edit { preferences ->
-            preferences.remove(AUTH_KEY)
+            preferences[AUTH_KEY] = ""
         }
     }
 

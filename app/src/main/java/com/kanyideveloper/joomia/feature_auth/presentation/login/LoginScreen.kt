@@ -108,8 +108,7 @@ fun LoginScreen(
                     ),
                     maxLines = 1,
                     singleLine = true,
-                    isError = usernameState.error != null
-
+                    isError = usernameState.error != null,
                 )
                 if (usernameState.error != "") {
                     Text(
@@ -183,7 +182,8 @@ fun LoginScreen(
                     keyboardController?.hide()
                     viewModel.loginUser()
                 },
-                shape = RoundedCornerShape(8)
+                shape = RoundedCornerShape(8),
+                enabled = !loginState.isLoading
             ) {
                 Text(
                     modifier = Modifier
