@@ -11,9 +11,6 @@ A fake shopping app built with Jetpack Compose consuming [FAKE STORE API](https:
     - Username: johnd
     - Password: m38rmF$
 
-## To be worked on
-- Add Filtering functionality
-
 ## Demo
 <img src="screenshots/splash.png" width="250"/> <img src="screenshots/auth.png" width="250"/>
 
