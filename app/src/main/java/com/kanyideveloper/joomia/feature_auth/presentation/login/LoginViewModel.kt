@@ -18,13 +18,13 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase) : ViewModel() {
 
-    private val _usernameState = mutableStateOf(TextFieldState())
+    private val _usernameState = mutableStateOf(TextFieldState(text = "johnd"))
     val usernameState: State<TextFieldState> = _usernameState
     fun setUsername(value: String) {
         _usernameState.value = usernameState.value.copy(text = value)
     }
 
-    private val _passwordState = mutableStateOf(TextFieldState())
+    private val _passwordState = mutableStateOf(TextFieldState(text = "m38rmF$"))
     val passwordState: State<TextFieldState> = _passwordState
     fun setPassword(value: String) {
         _passwordState.value = _passwordState.value.copy(text = value)
