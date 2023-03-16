@@ -1,7 +1,6 @@
 package com.kanyideveloper.joomia.feature_wish_list.presentation.wishlist
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
@@ -30,6 +30,7 @@ import com.kanyideveloper.joomia.R
 import com.kanyideveloper.joomia.core.presentation.ui.theme.YellowMain
 import com.kanyideveloper.joomia.core.util.UiEvents
 import com.kanyideveloper.joomia.destinations.ProductDetailsScreenDestination
+import com.kanyideveloper.joomia.feature_wish_list.data.local.WishlistEntity
 import com.kanyideveloper.joomia.feature_wish_list.data.mapper.toDomain
 import com.kanyideveloper.joomia.feature_wish_list.data.mapper.toProduct
 import com.kanyideveloper.joomia.feature_wish_list.domain.model.Wishlist
@@ -41,7 +42,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun WishlistScreen(
     navigator: DestinationsNavigator,
-    viewModel: WishlistViewModel = hiltViewModel()
+    viewModel: WishlistViewModel = hiltViewModel(),
 ) {
 
     val wishlistItems = viewModel.wishlistItems.observeAsState(initial = emptyList())
@@ -91,6 +92,25 @@ fun WishlistScreen(
             )
         }
     ) {
+        WishListScreenContent(
+            wishlistItems = wishlistItems,
+            onClickOneWishItem = { wishlist ->
+                navigator.navigate(ProductDetailsScreenDestination(wishlist.toProduct()))
+            },
+            onClickWishIcon = { wishlist ->
+                viewModel.deleteFromWishlist(wishlist)
+            }
+        )
+    }
+}
+
+@Composable
+private fun WishListScreenContent(
+    wishlistItems: State<List<WishlistEntity>>,
+    onClickOneWishItem: (Wishlist) -> Unit,
+    onClickWishIcon: (Wishlist) -> Unit,
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             items(wishlistItems.value) { wishlist ->
                 WishlistItem(
@@ -98,8 +118,8 @@ fun WishlistScreen(
                         .fillMaxWidth()
                         .height(135.dp)
                         .padding(8.dp),
-                    viewModel = viewModel,
-                    navigator = navigator
+                    onClickOneWishItem = onClickOneWishItem,
+                    onClickWishIcon = onClickWishIcon
                 )
             }
         }
@@ -121,19 +141,21 @@ fun WishlistScreen(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WishlistItem(
     wishlist: Wishlist,
     modifier: Modifier = Modifier,
-    viewModel: WishlistViewModel,
-    navigator: DestinationsNavigator
+    onClickOneWishItem: (Wishlist) -> Unit,
+    onClickWishIcon: (Wishlist) -> Unit,
 ) {
     Card(
-        modifier = modifier.clickable {
-            navigator.navigate(ProductDetailsScreenDestination(wishlist.toProduct()))
-        },
+        modifier = modifier,
         shape = RoundedCornerShape(8.dp),
-        elevation = 3.dp
+        elevation = 3.dp,
+        onClick = {
+            onClickOneWishItem(wishlist)
+        }
     ) {
         Row {
             Image(
@@ -176,7 +198,7 @@ fun WishlistItem(
                 )
                 IconButton(
                     onClick = {
-                        viewModel.deleteFromWishlist(wishlist)
+                        onClickWishIcon(wishlist)
                     },
                     modifier = Modifier.align(End),
                 ) {

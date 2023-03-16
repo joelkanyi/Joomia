@@ -57,18 +57,18 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Destination
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-
     val keyboardController = LocalSoftwareKeyboardController.current
     var filtersExpanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
-
+    val productsState = viewModel.productsState.value
+    val categories = viewModel.categoriesState.value
 
     Scaffold(
         topBar = {
@@ -89,7 +89,6 @@ fun HomeScreen(
             )
         },
     ) {
-
         val scaffoldState = rememberScaffoldState()
         LaunchedEffect(key1 = true) {
             viewModel.eventFlow.collectLatest { event ->
@@ -125,81 +124,103 @@ fun HomeScreen(
             )
         }
 
-        val productsState = viewModel.productsState.value
-        val categories = viewModel.categoriesState.value
+        HomeScreenContent(
+            categories = categories,
+            productsState = productsState,
+            navigator = navigator,
+            bannerImageUrl = viewModel.bannerImageState.value,
+            selectedCategory = viewModel.selectedCategory.value,
+            onSelectCategory = { category ->
+                viewModel.setCategory(category)
+                viewModel.getProducts(viewModel.selectedCategory.value)
+            }
+        )
+    }
+}
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            LazyVerticalGrid(
-                cells = GridCells.Fixed(2),
-                contentPadding = PaddingValues(16.dp)
-            ) {
-                item(span = { GridItemSpan(2) }) {
-                    Card(
-                        elevation = 0.dp,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(170.dp)
-                    ) {
-                        Image(
-                            painter = rememberAsyncImagePainter(
-                                ImageRequest.Builder(LocalContext.current)
-                                    .data(data = viewModel.bannerImageState.value)
-                                    .apply(block = fun ImageRequest.Builder.() {
-                                        placeholder(R.drawable.ic_placeholder)
-                                        crossfade(true)
-                                    }).build()
-                            ),
-                            contentScale = ContentScale.Crop,
-                            contentDescription = "Black Friday Banner"
-                        )
-                    }
-
-                } // Header for some banner Image
-
-                // Some spacer
-                item(span = { GridItemSpan(2) }) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                item(span = { GridItemSpan(2) }) {
-
-                    Categories(categories = categories, viewModel = viewModel)
-
-                } // Header with a lazyRow for product categories
-
-                // Some spacer
-                item(span = { GridItemSpan(2) }) {
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-
-                // Actual product items list
-                items(productsState.products) { product ->
-                    ProductItem(
-                        product = product,
-                        navigator = navigator,
-                        modifier = Modifier
-                            .width(150.dp)
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun HomeScreenContent(
+    categories: List<String>,
+    productsState: ProductsState,
+    navigator: DestinationsNavigator,
+    bannerImageUrl: String,
+    selectedCategory: String,
+    onSelectCategory: (String) -> Unit,
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyVerticalGrid(
+            cells = GridCells.Fixed(2),
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            item(span = { GridItemSpan(2) }) {
+                Card(
+                    elevation = 0.dp,
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(170.dp)
+                ) {
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            ImageRequest.Builder(LocalContext.current)
+                                .data(data = bannerImageUrl)
+                                .apply(block = fun ImageRequest.Builder.() {
+                                    placeholder(R.drawable.ic_placeholder)
+                                    crossfade(true)
+                                }).build()
+                        ),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "Black Friday Banner"
                     )
                 }
+
+            } // Header for some banner Image
+
+            // Some spacer
+            item(span = { GridItemSpan(2) }) {
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
-            if (productsState.isLoading) {
-                LoadingAnimation(
-                    modifier = Modifier.align(Center),
-                    circleSize = 16.dp,
+            item(span = { GridItemSpan(2) }) {
+                Categories(
+                    categories = categories,
+                    onSelectCategory = onSelectCategory,
+                    selectedCategory = selectedCategory
+                )
+            } // Header with a lazyRow for product categories
+
+            // Some spacer
+            item(span = { GridItemSpan(2) }) {
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            // Actual product items list
+            items(productsState.products) { product ->
+                ProductItem(
+                    product = product,
+                    navigator = navigator,
+                    modifier = Modifier
+                        .width(150.dp)
                 )
             }
+        }
 
-            if (productsState.error != null) Text(
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Center)
-                    .padding(16.dp),
-                text = productsState.error,
-                color = Color.Red
+        if (productsState.isLoading) {
+            LoadingAnimation(
+                modifier = Modifier.align(Center),
+                circleSize = 16.dp,
             )
         }
+
+        if (productsState.error != null) Text(
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .align(Center)
+                .padding(16.dp),
+            text = productsState.error,
+            color = Color.Red
+        )
     }
 }
 
@@ -448,7 +469,11 @@ fun MyTopAppBar(
 
 
 @Composable
-fun Categories(categories: List<String>, viewModel: HomeViewModel) {
+fun Categories(
+    categories: List<String>,
+    onSelectCategory: (String) -> Unit,
+    selectedCategory: String,
+) {
     LazyRow(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -465,11 +490,10 @@ fun Categories(categories: List<String>, viewModel: HomeViewModel) {
                         ),
                     )
                     .clickable {
-                        viewModel.setCategory(category)
-                        viewModel.getProducts(viewModel.selectedCategory.value)
+                        onSelectCategory(category)
                     }
                     .background(
-                        if (category == viewModel.selectedCategory.value) {
+                        if (category == selectedCategory) {
                             YellowMain
                         } else {
                             MainWhiteColor

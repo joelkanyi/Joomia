@@ -1,7 +1,9 @@
 package com.kanyideveloper.joomia.feature_auth.presentation.forgot_password
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -24,6 +26,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun ForgotPasswordScreen() {
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             Column(Modifier.padding(16.dp)) {
@@ -36,16 +40,24 @@ fun ForgotPasswordScreen() {
             }
         }
     ) {
+        ForgotPasswordScreenContent(
+            onClickForgotPassword = {
+                Toast.makeText(
+                    context,
+                    "This API does not provide an endpoint for sending password reset link, just login with the credentials provided in the README file",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        )
+    }
+}
 
-        val context = LocalContext.current
-
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+@Composable
+private fun ForgotPasswordScreenContent(
+    onClickForgotPassword: () -> Unit,
+) {
+    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+        item {
             Spacer(modifier = Modifier.height(64.dp))
 
             OutlinedTextField(
@@ -62,17 +74,13 @@ fun ForgotPasswordScreen() {
                     keyboardType = KeyboardType.Email,
                 ),
             )
+        }
 
+        item {
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = {
-                    Toast.makeText(
-                        context,
-                        "This API does not provide an endpoint for sending password reset link, just login with the credentials provided in the README file",
-                        Toast.LENGTH_LONG
-                    ).show()
-                },
+                onClick = onClickForgotPassword,
                 shape = RoundedCornerShape(8)
             ) {
                 Text(

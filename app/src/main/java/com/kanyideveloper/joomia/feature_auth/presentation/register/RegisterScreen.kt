@@ -2,6 +2,7 @@ package com.kanyideveloper.joomia.feature_auth.presentation.register
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -29,7 +30,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun RegisterScreen(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
 ) {
     Scaffold(
         topBar = {
@@ -43,13 +44,23 @@ fun RegisterScreen(
             }
         }
     ) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+        RegisterScreenContent(
+            onClickSignUp = {
+                navigator.popBackStack()
+                navigator.navigate(LoginScreenDestination)
+            }
+        )
+    }
+}
+
+@Composable
+private fun RegisterScreenContent(
+    onClickSignUp: () -> Unit,
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp)
+    ) {
+        item {
             Spacer(modifier = Modifier.height(64.dp))
 
             OutlinedTextField(
@@ -69,7 +80,8 @@ fun RegisterScreen(
                 maxLines = 1,
                 singleLine = true,
             )
-
+        }
+        item {
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
@@ -88,7 +100,8 @@ fun RegisterScreen(
                 maxLines = 1,
                 singleLine = true,
             )
-
+        }
+        item {
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
@@ -107,7 +120,8 @@ fun RegisterScreen(
                 maxLines = 1,
                 singleLine = true,
             )
-
+        }
+        item {
             Spacer(modifier = Modifier.height(32.dp))
 
             val context = LocalContext.current
@@ -129,14 +143,12 @@ fun RegisterScreen(
                         .padding(12.dp), text = "Sign Up", textAlign = TextAlign.Center
                 )
             }
-
+        }
+        item {
             Spacer(modifier = Modifier.height(24.dp))
 
             TextButton(
-                onClick = {
-                    navigator.popBackStack()
-                    navigator.navigate(LoginScreenDestination)
-                },
+                onClick = onClickSignUp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(

@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,7 +43,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun ProductDetailsScreen(
     product: Product,
     navigator: DestinationsNavigator,
-    viewModel: WishlistViewModel = hiltViewModel()
+    viewModel: WishlistViewModel = hiltViewModel(),
 ) {
     val inWishlist = viewModel.inWishlist(product.id).observeAsState().value != null
 
@@ -116,15 +117,18 @@ fun ProductDetailsScreen(
             }
         }
     ) {
-        Details(
-            product,
+        DetailsScreenContent(
+            product = product,
             modifier = Modifier.fillMaxSize()
         )
     }
 }
 
 @Composable
-fun Details(product: Product, modifier: Modifier = Modifier) {
+fun DetailsScreenContent(
+    product: Product,
+    modifier: Modifier = Modifier,
+) {
     Column {
         Box(modifier = modifier.weight(1f), contentAlignment = Alignment.Center) {
             Image(
@@ -242,7 +246,7 @@ fun Details(product: Product, modifier: Modifier = Modifier) {
                                 .padding(5.dp),
                             fontSize = 16.sp,
                             textAlign = TextAlign.Center,
-                            text = "Add to Cart"
+                            text = stringResource(R.string.add_to_cart)
                         )
                     }
                 }
