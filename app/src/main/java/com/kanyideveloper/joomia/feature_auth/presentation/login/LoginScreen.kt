@@ -106,6 +106,8 @@ fun LoginScreen(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                     ),
+                    maxLines = 1,
+                    singleLine = true,
                     isError = usernameState.error != null
 
                 )
@@ -135,6 +137,8 @@ fun LoginScreen(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
                     ),
+                    maxLines = 1,
+                    singleLine = true,
                     isError = passwordState.error != null
 
                 )

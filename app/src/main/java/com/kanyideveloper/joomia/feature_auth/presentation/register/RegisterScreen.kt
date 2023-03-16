@@ -66,6 +66,8 @@ fun RegisterScreen(
                     autoCorrect = true,
                     keyboardType = KeyboardType.Email,
                 ),
+                maxLines = 1,
+                singleLine = true,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -83,6 +85,8 @@ fun RegisterScreen(
                     autoCorrect = true,
                     keyboardType = KeyboardType.Email,
                 ),
+                maxLines = 1,
+                singleLine = true,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -100,6 +104,8 @@ fun RegisterScreen(
                     autoCorrect = true,
                     keyboardType = KeyboardType.Password,
                 ),
+                maxLines = 1,
+                singleLine = true,
             )
 
             Spacer(modifier = Modifier.height(32.dp))
