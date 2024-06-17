@@ -1,4 +1,4 @@
-package com.kanyideveloper.joomia.di
+package com.kanyideveloper.joomia.feature_auth.di
 
 import com.kanyideveloper.joomia.core.util.Constants.BASE_URL
 import com.kanyideveloper.joomia.feature_auth.data.local.AuthPreferences

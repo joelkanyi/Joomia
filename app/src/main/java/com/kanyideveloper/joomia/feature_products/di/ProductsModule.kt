@@ -1,4 +1,4 @@
-package com.kanyideveloper.joomia.di
+package com.kanyideveloper.joomia.feature_products.di
 
 import com.kanyideveloper.joomia.core.util.Constants
 import com.kanyideveloper.joomia.feature_products.data.remote.ProductsApiService

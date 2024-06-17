@@ -1,4 +1,4 @@
-package com.kanyideveloper.joomia.di
+package com.kanyideveloper.joomia.feature_wish_list.di
 
 import android.content.Context
 import androidx.room.Room

@@ -1,4 +1,4 @@
-package com.kanyideveloper.joomia.di
+package com.kanyideveloper.joomia.core.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore

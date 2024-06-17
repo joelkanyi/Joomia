@@ -1,4 +1,4 @@
-package com.kanyideveloper.joomia.di
+package com.kanyideveloper.joomia.feature_cart.di
 
 import com.google.gson.Gson
 import com.kanyideveloper.joomia.core.util.Constants

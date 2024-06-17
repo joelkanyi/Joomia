@@ -1,4 +1,4 @@
-package com.kanyideveloper.joomia.di
+package com.kanyideveloper.joomia.feature_profile.di
 
 import com.google.gson.Gson
 import com.kanyideveloper.joomia.feature_auth.data.local.AuthPreferences
